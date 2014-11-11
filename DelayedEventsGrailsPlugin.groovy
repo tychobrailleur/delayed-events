@@ -19,29 +19,31 @@ class DelayedEventsGrailsPlugin {
     def description = "Support for delayed events"
 
     def documentation = "http://grails.org/plugin/delayed-events"
+    def issueManagement = [ system: 'github', url: 'https://github.com/tychobrailleur/delayed-events/issues' ]
+    def scm = [ url: 'https://github.com/tychobrailleur/delayed-events' ]
 
-        def license = 'MIT'
+    def license = 'MIT'
 
-        def doWithSpring = {
-            asyncApplicationEventMulticaster(GrailsApplicationEventMulticaster) {
-                persistenceInterceptor = ref('persistenceInterceptor')
-            }
-            asyncEventPublisher(AsyncEventPublisher) {
-                eventMulticaster = ref('asyncApplicationEventMulticaster')
-            }
-            delayedEventProcessingService(DelayedEventProcessingService)
+    def doWithSpring = {
+        asyncApplicationEventMulticaster(GrailsApplicationEventMulticaster) {
+            persistenceInterceptor = ref('persistenceInterceptor')
         }
-
-        def doWithDynamicMethods = { ctx ->
-            [application.controllerClasses, application.serviceClasses, application.domainClasses].flatten().each {
-                addPublishDelayedEvent(it, application.mainContext)
-            }
+        asyncEventPublisher(AsyncEventPublisher) {
+            eventMulticaster = ref('asyncApplicationEventMulticaster')
         }
+        delayedEventProcessingService(DelayedEventProcessingService)
+    }
 
-        def addPublishDelayedEvent(subject, ctx) {
-            ApplicationEventPublisher asyncEventPublisher = ctx.asyncEventPublisher
-            subject.metaClass.publishDelayedEvent = { DelayedEvent event ->
-                asyncEventPublisher.publishEvent(event)
-            }
+    def doWithDynamicMethods = { ctx ->
+        [application.controllerClasses, application.serviceClasses, application.domainClasses].flatten().each {
+            addPublishDelayedEvent(it, application.mainContext)
         }
+    }
+
+    def addPublishDelayedEvent(subject, ctx) {
+        ApplicationEventPublisher asyncEventPublisher = ctx.asyncEventPublisher
+        subject.metaClass.publishDelayedEvent = { DelayedEvent event ->
+            asyncEventPublisher.publishEvent(event)
+        }
+    }
 }
