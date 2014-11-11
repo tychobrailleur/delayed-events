@@ -1,0 +1,6 @@
+.DS_Store
+target/
+*.war
+*.zip
+*.zip.sha1
+*.log
