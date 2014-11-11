@@ -1,15 +1,13 @@
 <plugin name='delayed-events' version='0.1' grailsVersion='2.2 &gt; *'>
-  <author>S??bastien Le Callonnec</author>
+  <author>Sébastien Le Callonnec</author>
   <authorEmail>sebastien@weblogism.com</authorEmail>
   <title>Delayed Events Plugin</title>
-  <description>Support for delayed events
-</description>
+  <description>Support for delayed events</description>
   <documentation>http://grails.org/plugin/delayed-events</documentation>
   <type>DelayedEventsGrailsPlugin</type>
   <resources>
-    <resource>delayedevents.test.TestController</resource>
     <resource>delayedevents.ProcessDelayedEventsJob</resource>
-    <resource>delayedevents.test.TestEventListenerService</resource>
+    <resource>delayedevents.DelayedEventProcessingService</resource>
   </resources>
   <repositories>
     <repository name='grailsCentral' url='http://grails.org/plugins' />
@@ -18,8 +16,8 @@
   <dependencies />
   <plugins>
     <compile>
-      <plugin group='org.grails.plugins' name='spring-events' version='1.2' />
       <plugin group='org.grails.plugins' name='quartz2' version='0.2.3' />
+      <plugin group='org.grails.plugins' name='spring-events' version='1.2' />
     </compile>
   </plugins>
   <runtimePluginRequirements />

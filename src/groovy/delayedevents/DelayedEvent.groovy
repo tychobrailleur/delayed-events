@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationEvent
 import java.util.concurrent.Delayed
 import java.util.concurrent.TimeUnit
 
-class DelayedEvent extends ApplicationEvent implements Delayed  {
+class DelayedEvent extends ApplicationEvent implements Delayed {
     ApplicationEvent originalEvent
     long delay
     long triggerTime
