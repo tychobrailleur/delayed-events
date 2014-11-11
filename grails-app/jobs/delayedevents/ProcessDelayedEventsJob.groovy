@@ -11,7 +11,6 @@ class ProcessDelayedEventsJob {
     }
 
     def execute() {
-        log.debug("${jobName} executing...")
         while (!delayedEventProcessingService.isEmpty()) {
             delayedEventProcessingService.pollAndFire()
         }
