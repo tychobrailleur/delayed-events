@@ -1,23 +1,32 @@
 package delayedevents
 
-import org.springframework.context.ApplicationListener
+import groovy.transform.CompileStatic
+import groovy.transform.TypeCheckingMode
+import groovy.util.logging.Slf4j
 
 import java.util.concurrent.DelayQueue
 
+import org.springframework.context.ApplicationListener
+
+@CompileStatic
+@Slf4j
 class DelayedEventProcessingService implements ApplicationListener<DelayedEvent> {
-    final DelayQueue<DelayedEvent> delayQueue = new DelayQueue<DelayedEvent>()
-    @Override
+
+    static transactional = false
+
+    private final DelayQueue<DelayedEvent> delayQueue = new DelayQueue<DelayedEvent>()
+
     void onApplicationEvent(DelayedEvent event) {
         log.debug("Delayed event triggered with delay ${event.delay}")
-        delayQueue.add(event)
+        delayQueue << event
     }
 
+    @CompileStatic(TypeCheckingMode.SKIP)
     DelayedEvent pollAndFire() {
-        DelayedEvent event = delayQueue.take()
-        publishEvent(event.originalEvent)
+        publishEvent(delayQueue.take().originalEvent)
     }
 
     boolean isEmpty() {
-        delayQueue.size() <= 0
+        delayQueue.empty
     }
 }

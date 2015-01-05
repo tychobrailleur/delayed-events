@@ -1,6 +1,7 @@
 .DS_Store
-target/
-*.war
-*.zip
-*.zip.sha1
 *.log
+/grails-delayed-events-*.zip
+/grails-delayed-events-*.zip.sha1
+/plugin.xml
+/target
+/web-app/WEB-INF

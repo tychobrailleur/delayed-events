@@ -1,17 +1,24 @@
 package delayedevents
 
+import groovy.transform.CompileStatic
+
 class ProcessDelayedEventsJob {
-    def static jobName = this.name
-    def delayedEventProcessingService
-    def concurrent = false
-    public final static String cronExpression = '0/1 * * * * ?'
+
+    static String jobName = this.name
+
+    DelayedEventProcessingService delayedEventProcessingService
+
+    boolean concurrent = false
+
+    public static final String cronExpression = '0/1 * * * * ?'
 
     static triggers = {
         cron name: name, cronExpression: cronExpression
     }
 
-    def execute() {
-        while (!delayedEventProcessingService.isEmpty()) {
+    @CompileStatic
+    void execute() {
+        while (!delayedEventProcessingService.empty) {
             delayedEventProcessingService.pollAndFire()
         }
     }
