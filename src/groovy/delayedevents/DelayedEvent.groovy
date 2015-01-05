@@ -1,30 +1,32 @@
 package delayedevents
 
-
-import org.springframework.context.ApplicationEvent
+import groovy.transform.CompileStatic
+import groovy.transform.TypeCheckingMode
 
 import java.util.concurrent.Delayed
 import java.util.concurrent.TimeUnit
 
+import org.springframework.context.ApplicationEvent
+
+@CompileStatic
 class DelayedEvent extends ApplicationEvent implements Delayed {
-    ApplicationEvent originalEvent
-    long delay
-    long triggerTime
-    
-    DelayedEvent(def source, ApplicationEvent originalEvent, long delay) {
+    final ApplicationEvent originalEvent
+    final long delay
+    final long triggerTime
+
+    DelayedEvent(source, ApplicationEvent originalEvent, long delay) {
         super(source)
         this.originalEvent = originalEvent
         this.delay = delay
-        this.triggerTime = System.currentTimeMillis() + delay
+        triggerTime = System.currentTimeMillis() + delay
     }
 
-    @Override
+    @CompileStatic(TypeCheckingMode.SKIP)
     int compareTo(Delayed obj) {
-        if (!obj?.triggerTime || !triggerTime) return 0;
+        if (!obj?.triggerTime || !triggerTime) return 0
         return triggerTime.compareTo(obj.triggerTime)
     }
 
-    @Override
     long getDelay(TimeUnit unit) {
         long updated = triggerTime - System.currentTimeMillis()
         return unit.convert(updated, TimeUnit.MILLISECONDS)
